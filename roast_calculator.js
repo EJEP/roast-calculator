@@ -16,6 +16,17 @@ function generateTable(times) {
     tableDiv.appendChild(timesTable);
 }
 
+function roastTimesSort(a, b) {
+    if (a[1] < b[1]) {
+        return -1;
+    }
+    if (a[1] > b[1]) {
+        return 1;
+    }
+
+    return 0;
+}
+
 function calculateTimes() {
     let timeNow = new Date();
     let durationMins = Number(durationField.value);
@@ -42,6 +53,7 @@ function calculateTimes() {
                      ];
 
     //console.log(eventTimes);
+    eventTimes.sort(roastTimesSort);
     generateTable(eventTimes);
 }
 
