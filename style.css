@@ -52,6 +52,15 @@ input[type=text] {
     height: 22px;
     border: 2px solid #F9D48A;
     color: #331832;
+    width: 6em;
+}
+input[type=number] {
+    font-family: 'Zilla Slab', sans-serif;
+    background-color:#F0FDD5;
+    height: 22px;
+    border: 2px solid #F9D48A;
+    color: #331832;
+    width: 4em;
 }
 html {
     background-color:#331832;

@@ -1,6 +1,11 @@
 const timesSubmit = document.querySelector('.timesSubmit');
 const inTimeField = document.querySelector('.inTimeField');
 const durationField = document.querySelector('.durationField');
+const vegNameField = document.querySelector('.vegNameField');
+const vegDurationField = document.querySelector('.vegDurationField');
+const vegSubmit = document.querySelector('.vegSubmit');
+
+boiledVeg = [];
 
 function generateTable(times) {
     let tableDiv = document.querySelector('.timesTable');
@@ -28,9 +33,21 @@ function roastTimesSort(a, b) {
 }
 
 function calculateTimes() {
+
+    if (inTimeField.value == '') {
+        alert("Meat in time is required");
+        return false;
+    }
+
+    if (durationField.value == '' | isNaN(durationField.value)) {
+        alert("Meat duration must be a number");
+        return false;
+    }
+
+
     let timeNow = new Date();
     let durationMins = Number(durationField.value);
-
+    console.log(inTimeField.value);
     // This is deeply cursed, it cannot possibly be the best way of doing this!
     let meatInTime = new Date(timeNow.toISOString().split('T')[0] + 'T' + inTimeField.value + ':00.000Z');
 
@@ -62,9 +79,72 @@ function calculateTimes() {
                       ['serving time', servingTime]
                      ];
 
-    //console.log(eventTimes);
+    // boiled veg times
+    for (let i = 0; i < boiledVeg.length; i++){
+        description = boiledVeg[i].name + ' on time';
+        eventTimes.push([description, new Date(servingTime.getTime() - (boiledVeg[i].duration * 60000))]);
+    }
+
+    console.log(eventTimes);
     eventTimes.sort(roastTimesSort);
     generateTable(eventTimes);
 }
 
+function setVegTableHead() {
+    let vegTable = document.querySelector('.vegTable');
+    let vegTHead = vegTable.createTHead();
+    let row = vegTHead.insertRow();
+
+    let th = document.createElement("th");
+    let text = document.createTextNode('Vegetable');
+    th.appendChild(text);
+    row.appendChild(th);
+
+    let th2 = document.createElement("th");
+    let text2 = document.createTextNode('Duration');
+    th2.appendChild(text2);
+    row.appendChild(th2);
+}
+
+function displayVeg() {
+    if (boiledVeg.length === 1) {
+        setVegTableHead();
+    }
+    let tableDiv = document.querySelector('.vegInfo');
+    let vegTable = document.querySelector('.vegTable');
+
+    let row = vegTable.insertRow();
+    let nameCell = row.insertCell();
+    nameCell.appendChild(document.createTextNode(boiledVeg[boiledVeg.length - 1].name));
+    //nameCell.appendChild(document.createTextNode('hello'));
+    let durationCell = row.insertCell();
+    durationCell.appendChild(document.createTextNode(boiledVeg[boiledVeg.length - 1].duration));
+}
+
+function addVegetable() {
+    let vegName = vegNameField.value;
+    let vegDuration = Number(vegDurationField.value);
+
+    // validate
+    if (vegName == "") {
+        alert("Name must be filled out");
+        return false;
+    }
+
+    if (vegDurationField.value == '' | isNaN(vegDurationField.value)) {
+        alert("Vegetable duration must be a number");
+        return false;
+    }
+
+    vegDetails = {name: vegName, duration: vegDuration};
+    boiledVeg.push(vegDetails);
+    displayVeg();
+    // clear the form
+    vegNameField.value='';
+    vegDurationField.value='';
+}
+
+
+
+vegSubmit.addEventListener('click', addVegetable);
 timesSubmit.addEventListener('click', calculateTimes);

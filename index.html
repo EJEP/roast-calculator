@@ -4,22 +4,36 @@
     <link rel="stylesheet" href="style.css">
     <head>
         <meta charset="utf-8">
-
         <title>Roast Calculator</title>
     </head>
 
     <body>
         <h1>Enter the timings below</h1>
 
-        <div class="form">
+        <form class="meatForm" >
             <label for="inTime">Meat in time: </label>
             <input type="time" id="inTime" class="inTimeField">
             <br>
             <label for="duration">Meat cooking duration (minutes): </label>
-            <input type="text" id="duration" class="durationField">
+            <input type="number" id="duration" class="durationField" required>
             <br>
-            <input type="submit" value="Submit" class="timesSubmit">
+        </form>
+
+        <br>
+        <div class="vegInfo">
+            <table class="vegTable">
+            </table>
         </div>
+
+        <form class="boiledForm" onsubmit="return validateVeg()" name="boiledForm">
+            <label for="vegName">Vegetable name: </label>
+            <input type="text" id="vegName" class="vegNameField" required>
+            <label for="vegDuration">Vegetable cooking duration (minutes): </label>
+            <input type="number" id="vegDuration" class="vegDurationField" required type="number" name="vegDuration">
+            <input type="submit" value="Add" class="vegSubmit">
+        </form>
+
+        <input type="submit" value="Submit" class="timesSubmit">
 
         <div class="timesTable">
 
