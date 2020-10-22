@@ -1,13 +1,13 @@
 h1 {
-    font-family: 'Roboto Slab', sans-serif;
+    font-family: 'Zilla Slab', sans-serif;
     color:#FDF0D5;
 }
 h2 {
-    font-family: 'Roboto Slab', sans-serif;
+    font-family: 'Zilla Slab', sans-serif;
     color:#FDF0D5;
 }
 h3 {
-    font-family: 'Roboto Slab', sans-serif;
+    font-family: 'Zilla Slab', sans-serif;
     color:#FDF0D5;
 }
 p {
@@ -25,6 +25,11 @@ table {
     font-weight: 400;
     color:#FDF0D5;
     border-collapse: collapse;
+}
+th {
+    padding-right: 1em;
+    font-weight: 600;
+    text-align: left;
 }
 td:first-of-type {
     padding-right: 1em;
@@ -53,6 +58,7 @@ input[type=text] {
     border: 2px solid #F9D48A;
     color: #331832;
     width: 6em;
+    font-weight: 400;
 }
 input[type=number] {
     font-family: 'Zilla Slab', sans-serif;

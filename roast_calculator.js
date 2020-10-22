@@ -10,8 +10,24 @@ boiledVeg = [];
 function generateTable(times) {
     let tableDiv = document.querySelector('.timesTable');
     let timesTable = document.createElement('table');
+
+    let timesTHead = timesTable.createTHead();
+    let row = timesTHead.insertRow();
+
+    let th = document.createElement("th");
+    let text = document.createTextNode('Task');
+    th.appendChild(text);
+    row.appendChild(th);
+
+    let th2 = document.createElement("th");
+    let text2 = document.createTextNode('Time');
+    th2.appendChild(text2);
+    row.appendChild(th2);
+
+    let timesTBody = timesTable.createTBody();
+
     for (var i = 0; i < times.length; i++) {
-        let row = timesTable.insertRow();
+        let row = timesTBody.insertRow();
         let descriptionCell = row.insertCell();
         descriptionCell.appendChild(document.createTextNode(times[i][0]));
         let timeCell = row.insertCell();
@@ -85,7 +101,6 @@ function calculateTimes() {
         eventTimes.push([description, new Date(servingTime.getTime() - (boiledVeg[i].duration * 60000))]);
     }
 
-    console.log(eventTimes);
     eventTimes.sort(roastTimesSort);
     generateTable(eventTimes);
 }
@@ -113,7 +128,8 @@ function displayVeg() {
     let tableDiv = document.querySelector('.vegInfo');
     let vegTable = document.querySelector('.vegTable');
 
-    let row = vegTable.insertRow();
+    let vegTBody = vegTable.createTBody();
+    let row = vegTBody.insertRow();
     let nameCell = row.insertCell();
     nameCell.appendChild(document.createTextNode(boiledVeg[boiledVeg.length - 1].name));
     //nameCell.appendChild(document.createTextNode('hello'));
