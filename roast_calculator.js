@@ -160,7 +160,5 @@ function addVegetable() {
     vegDurationField.value='';
 }
 
-
-
 vegSubmit.addEventListener('click', addVegetable);
 timesSubmit.addEventListener('click', calculateTimes);
