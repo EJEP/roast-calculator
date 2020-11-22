@@ -77,9 +77,9 @@ function calculateTimes() {
     let servingTime = new Date(potatoesInTime.getTime() + (50 * 60000));
 
     // Parsnips times
-    let parsnipsInTime = new Date(servingTime.getTime() - (40 * 60000));
-    let parsnipsOnBoilTime = new Date(servingTime.getTime() - (35 * 60000));
-    let parsnipsOffBoilTime = new Date(servingTime.getTime() - (30 * 60000));
+    let parsnipsOnBoilTime = new Date(servingTime.getTime() - (30 * 60000));
+    let parsnipsOffBoilTime = new Date(servingTime.getTime() - (25 * 60000));
+    let parsnipsInTime = new Date(servingTime.getTime() - (20 * 60000));
     let parsnipsTurnTime = new Date(servingTime.getTime() - (10 * 60000));
 
     let eventTimes = [['meat in time', meatInTime],
