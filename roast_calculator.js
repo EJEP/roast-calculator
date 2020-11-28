@@ -9,7 +9,16 @@ boiledVeg = [];
 
 function generateTable(times) {
     let tableDiv = document.querySelector('.timesTable');
+
+    // Test for existence of child table.
+    let testTimesTable = document.getElementById("timesTableTable");
+    // If it exists, delete it or replace it
+    if (testTimesTable) {
+        testTimesTable.remove();
+    }
+
     let timesTable = document.createElement('table');
+    timesTable.id = "timesTableTable";
 
     let timesTHead = timesTable.createTHead();
     let row = timesTHead.insertRow();
