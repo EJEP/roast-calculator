@@ -21,18 +21,18 @@
         </form>
 
         <br>
-        <p>Add details of any additional vegetables below.</p>
-        <div class="vegInfo">
-            <table class="vegTable">
+        <p>Add details of any additional items below.</p>
+        <div class="extraInfo">
+            <table class="extraTable">
             </table>
         </div>
 
-        <form class="boiledForm" onsubmit="return validateVeg()" name="boiledForm">
-            <label for="vegName">Vegetable name: </label>
-            <input type="text" id="vegName" class="vegNameField" required>
-            <label for="vegDuration">Vegetable cooking duration (minutes): </label>
-            <input type="number" id="vegDuration" class="vegDurationField" required type="number" name="vegDuration">
-            <input type="submit" value="Add" class="vegSubmit">
+        <form class="extraForm" onsubmit="return validateExtra()" name="extraForm">
+            <label for="extraName">Item name: </label>
+            <input type="text" id="extraName" class="extraNameField" required>
+            <label for="extraDuration">Item cooking duration (minutes): </label>
+            <input type="number" id="extraDuration" class="extraDurationField" required type="number" name="extraDuration">
+            <input type="submit" value="Add" class="extraSubmit">
         </form>
 
         <input type="submit" value="Submit" class="timesSubmit">

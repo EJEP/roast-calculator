@@ -1,11 +1,11 @@
 const timesSubmit = document.querySelector('.timesSubmit');
 const inTimeField = document.querySelector('.inTimeField');
 const durationField = document.querySelector('.durationField');
-const vegNameField = document.querySelector('.vegNameField');
-const vegDurationField = document.querySelector('.vegDurationField');
-const vegSubmit = document.querySelector('.vegSubmit');
+const extraNameField = document.querySelector('.extraNameField');
+const extraDurationField = document.querySelector('.extraDurationField');
+const extraSubmit = document.querySelector('.extraSubmit');
 
-boiledVeg = [];
+extra = [];
 
 function generateTable(times) {
     let tableDiv = document.querySelector('.timesTable');
@@ -104,23 +104,23 @@ function calculateTimes() {
                       ['serving time', servingTime]
                      ];
 
-    // boiled veg times
-    for (let i = 0; i < boiledVeg.length; i++){
-        description = boiledVeg[i].name + ' on time';
-        eventTimes.push([description, new Date(servingTime.getTime() - (boiledVeg[i].duration * 60000))]);
+    // extra times
+    for (let i = 0; i < extra.length; i++){
+        description = extra[i].name + ' on time';
+        eventTimes.push([description, new Date(servingTime.getTime() - (extra[i].duration * 60000))]);
     }
 
     eventTimes.sort(roastTimesSort);
     generateTable(eventTimes);
 }
 
-function setVegTableHead() {
-    let vegTable = document.querySelector('.vegTable');
-    let vegTHead = vegTable.createTHead();
-    let row = vegTHead.insertRow();
+function setExtraTableHead() {
+    let extraTable = document.querySelector('.extraTable');
+    let extraTHead = extraTable.createTHead();
+    let row = extraTHead.insertRow();
 
     let th = document.createElement("th");
-    let text = document.createTextNode('Vegetable');
+    let text = document.createTextNode('Extra');
     th.appendChild(text);
     row.appendChild(th);
 
@@ -130,44 +130,44 @@ function setVegTableHead() {
     row.appendChild(th2);
 }
 
-function displayVeg() {
-    if (boiledVeg.length === 1) {
-        setVegTableHead();
+function displayExtra() {
+    if (extra.length === 1) {
+        setExtraTableHead();
     }
-    let tableDiv = document.querySelector('.vegInfo');
-    let vegTable = document.querySelector('.vegTable');
+    let tableDiv = document.querySelector('.extraInfo');
+    let extraTable = document.querySelector('.extraTable');
 
-    let vegTBody = vegTable.createTBody();
-    let row = vegTBody.insertRow();
+    let extraTBody = extraTable.createTBody();
+    let row = extraTBody.insertRow();
     let nameCell = row.insertCell();
-    nameCell.appendChild(document.createTextNode(boiledVeg[boiledVeg.length - 1].name));
+    nameCell.appendChild(document.createTextNode(extra[extra.length - 1].name));
     //nameCell.appendChild(document.createTextNode('hello'));
     let durationCell = row.insertCell();
-    durationCell.appendChild(document.createTextNode(boiledVeg[boiledVeg.length - 1].duration));
+    durationCell.appendChild(document.createTextNode(extra[extra.length - 1].duration));
 }
 
-function addVegetable() {
-    let vegName = vegNameField.value;
-    let vegDuration = Number(vegDurationField.value);
+function addExtra() {
+    let extraName = extraNameField.value;
+    let extraDuration = Number(extraDurationField.value);
 
     // validate
-    if (vegName == "") {
+    if (extraName == "") {
         alert("Name must be filled out");
         return false;
     }
 
-    if (vegDurationField.value == '' | isNaN(vegDurationField.value)) {
-        alert("Vegetable duration must be a number");
+    if (extraDurationField.value == '' | isNaN(extraDurationField.value)) {
+        alert("Extra duration must be a number");
         return false;
     }
 
-    vegDetails = {name: vegName, duration: vegDuration};
-    boiledVeg.push(vegDetails);
-    displayVeg();
+    extraDetails = {name: extraName, duration: extraDuration};
+    extra.push(extraDetails);
+    displayExtra();
     // clear the form
-    vegNameField.value='';
-    vegDurationField.value='';
+    extraNameField.value='';
+    extraDurationField.value='';
 }
 
-vegSubmit.addEventListener('click', addVegetable);
+extraSubmit.addEventListener('click', addExtra);
 timesSubmit.addEventListener('click', calculateTimes);
