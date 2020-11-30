@@ -3,9 +3,14 @@ const inTimeField = document.querySelector('.inTimeField');
 const durationField = document.querySelector('.durationField');
 const extraNameField = document.querySelector('.extraNameField');
 const extraDurationField = document.querySelector('.extraDurationField');
+const extraForm = document.querySelector('.extraForm');
+
+
 const extraSubmit = document.querySelector('.extraSubmit');
+const intermediateButton = document.querySelector('.intermediateButton');
 
 extra = [];
+steps = [];
 
 function generateTable(times) {
     let tableDiv = document.querySelector('.timesTable');
@@ -149,25 +154,98 @@ function displayExtra() {
 function addExtra() {
     let extraName = extraNameField.value;
     let extraDuration = Number(extraDurationField.value);
+    let intermediateStepsDiv = document.querySelector('.intermediateSteps');
+    let intermediateStepsDivNames = intermediateStepsDiv.getElementsByClassName('stepName');
+    for (i = 0; i < intermediateStepsDivNames.length; i++ ) {
+        console.log(i);
+        console.log(intermediateStepsDivNames[i]);
+    }
 
     // validate
-    if (extraName == "") {
+    if (extraName === "") {
         alert("Name must be filled out");
         return false;
     }
 
-    if (extraDurationField.value == '' | isNaN(extraDurationField.value)) {
+    if (extraDurationField.value === '' | isNaN(extraDurationField.value)) {
         alert("Extra duration must be a number");
         return false;
     }
 
+    // Need to check
+    // If stepName is specified but not stepDuration
+    // If stepName is not specified but stepDuration is
+    // If stepDuration is specified but not a number
+    // First check if step duration is a number
+    /*
+    if (isNaN(stepDurationField.value)){
+        alert("Step duration must be a number");
+        return false;
+    }
+
+    // then if both are specified
+    if ((stepName !== '' & stepDuration === 0) | (stepName === '' & stepDuration !== 0)){
+        alert("Both the step name and step duration must be specified");
+        return false;
+    }
+
+    if (stepName !== '') {
+        step = {name: stepName, duration: stepDuration};
+        extraDetails = {name: extraName, duration: extraDuration, steps: step};
+    }
+    else {*/
     extraDetails = {name: extraName, duration: extraDuration};
+    //}
     extra.push(extraDetails);
     displayExtra();
     // clear the form
     extraNameField.value='';
     extraDurationField.value='';
+    // delete the steps
+    extraForm.insertBefore(intermediateButton, intermediateStepsDiv);
+    while(intermediateStepsDiv.firstChild){
+        intermediateStepsDiv.removeChild(intermediateStepsDiv.lastChild);
+    }
 }
 
+function addStep(){
+    // Add two fields to the intermediate steps div
+    let stepsDiv = document.querySelector('.intermediateSteps');
+    let nChildren = stepsDiv.childElementCount;
+
+    let stepNameInput = document.createElement('input');
+    stepNameInput.type='text';
+    stepNameInput.id='stepName' + (nChildren/2);
+    stepNameInput.required=true;
+    stepNameInput.name='stepName';
+    stepNameInput.className='stepName';
+
+    let stepNameLabel = document.createElement('label');
+    stepNameLabel.for = stepNameInput.id;
+    stepNameLabel.innerHTML = 'Step description: ';
+
+    let stepDurationInput = document.createElement('input');
+    stepDurationInput.type='number';
+    stepDurationInput.id='stepDuration' + (nChildren/2);
+    stepDurationInput.required=true;
+    stepDurationInput.name='stepDuration';
+    stepDurationInput.className='stepDuration';
+
+    let stepDurationLabel = document.createElement('label');
+    stepDurationLabel.for = stepNameInput.id;
+    stepDurationLabel.innerHTML = 'Step duration: ';
+
+    stepsDiv.appendChild(stepNameLabel);
+    stepsDiv.appendChild(stepNameInput);
+    stepsDiv.appendChild(stepDurationLabel);
+    stepsDiv.appendChild(stepDurationInput);
+
+    stepsDiv.appendChild(intermediateButton);
+    stepsDiv.appendChild(document.createElement('br'));
+
+}
+
+
 extraSubmit.addEventListener('click', addExtra);
+intermediateButton.addEventListener('click', addStep);
 timesSubmit.addEventListener('click', calculateTimes);
