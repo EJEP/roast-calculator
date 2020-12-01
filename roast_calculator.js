@@ -10,7 +10,6 @@ const extraSubmit = document.querySelector('.extraSubmit');
 const intermediateButton = document.querySelector('.intermediateButton');
 
 extra = [];
-steps = [];
 
 function generateTable(times) {
     let tableDiv = document.querySelector('.timesTable');
@@ -111,7 +110,7 @@ function calculateTimes() {
 
     // extra times
     for (let i = 0; i < extra.length; i++){
-        description = extra[i].name + ' on time';
+        description = extra[i].description;
         eventTimes.push([description, new Date(servingTime.getTime() - (extra[i].duration * 60000))]);
     }
 
@@ -145,7 +144,7 @@ function displayExtra() {
     let extraTBody = extraTable.createTBody();
     let row = extraTBody.insertRow();
     let nameCell = row.insertCell();
-    nameCell.appendChild(document.createTextNode(extra[extra.length - 1].name));
+    nameCell.appendChild(document.createTextNode(extra[extra.length - 1].description));
     //nameCell.appendChild(document.createTextNode('hello'));
     let durationCell = row.insertCell();
     durationCell.appendChild(document.createTextNode(extra[extra.length - 1].duration));
@@ -156,47 +155,41 @@ function addExtra() {
     let extraDuration = Number(extraDurationField.value);
     let intermediateStepsDiv = document.querySelector('.intermediateSteps');
     let intermediateStepsDivNames = intermediateStepsDiv.getElementsByClassName('stepName');
-    for (i = 0; i < intermediateStepsDivNames.length; i++ ) {
-        console.log(i);
-        console.log(intermediateStepsDivNames[i]);
-    }
+    let intermediateStepsDivDurations = intermediateStepsDiv.getElementsByClassName('stepDuration');
+
+    let events = [];
 
     // validate
-    if (extraName === "") {
-        alert("Name must be filled out");
+    if (!extraNameField.checkValidity() | !extraDurationField.checkValidity()){
         return false;
     }
+    description = extraName + ' on time';
+    extraDetails = {description: description, duration: extraDuration};
 
-    if (extraDurationField.value === '' | isNaN(extraDurationField.value)) {
-        alert("Extra duration must be a number");
-        return false;
-    }
-
-    // Need to check
-    // If stepName is specified but not stepDuration
-    // If stepName is not specified but stepDuration is
-    // If stepDuration is specified but not a number
-    // First check if step duration is a number
-    /*
-    if (isNaN(stepDurationField.value)){
-        alert("Step duration must be a number");
-        return false;
-    }
-
-    // then if both are specified
-    if ((stepName !== '' & stepDuration === 0) | (stepName === '' & stepDuration !== 0)){
-        alert("Both the step name and step duration must be specified");
-        return false;
-    }
-
-    if (stepName !== '') {
-        step = {name: stepName, duration: stepDuration};
-        extraDetails = {name: extraName, duration: extraDuration, steps: step};
-    }
-    else {*/
-    extraDetails = {name: extraName, duration: extraDuration};
-    //}
     extra.push(extraDetails);
+
+    let cumulativeDuration = 0;
+    let correctedStepDuration = 0;
+    for (i = 0; i < intermediateStepsDivNames.length; i++ ) {
+        if(!intermediateStepsDivNames[i].checkValidity()){
+            return false;
+        }
+        if(!intermediateStepsDivDurations[i].checkValidity()){
+            return false;
+        }
+
+        stepDescription = extraName + ' ' + intermediateStepsDivNames[i].value;
+        correctedStepDuration = extraDuration - cumulativeDuration - Number(intermediateStepsDivDurations[i].value);
+
+        console.log(stepDescription);
+        console.log(cumulativeDuration);
+        cumulativeDuration += Number(intermediateStepsDivDurations[i].value);
+
+        extra.push({description: stepDescription, duration: correctedStepDuration});
+    }
+
+
+
     displayExtra();
     // clear the form
     extraNameField.value='';
@@ -216,7 +209,7 @@ function addStep(){
     let stepNameInput = document.createElement('input');
     stepNameInput.type='text';
     stepNameInput.id='stepName' + (nChildren/2);
-    stepNameInput.required=true;
+    stepNameInput.required='required';
     stepNameInput.name='stepName';
     stepNameInput.className='stepName';
 
@@ -227,7 +220,7 @@ function addStep(){
     let stepDurationInput = document.createElement('input');
     stepDurationInput.type='number';
     stepDurationInput.id='stepDuration' + (nChildren/2);
-    stepDurationInput.required=true;
+    stepDurationInput.required='required';
     stepDurationInput.name='stepDuration';
     stepDurationInput.className='stepDuration';
 
