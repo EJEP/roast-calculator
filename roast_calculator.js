@@ -134,8 +134,8 @@ function setExtraTableHead() {
     row.appendChild(th2);
 }
 
-function displayExtra() {
-    if (extra.length === 1) {
+function displayExtra(thingsAdded) {
+    if (document.querySelector('.extraTable').rows.length === 0) {
         setExtraTableHead();
     }
     let tableDiv = document.querySelector('.extraInfo');
@@ -144,10 +144,10 @@ function displayExtra() {
     let extraTBody = extraTable.createTBody();
     let row = extraTBody.insertRow();
     let nameCell = row.insertCell();
-    nameCell.appendChild(document.createTextNode(extra[extra.length - 1].description));
+    nameCell.appendChild(document.createTextNode(extra[extra.length - thingsAdded].description));
     //nameCell.appendChild(document.createTextNode('hello'));
     let durationCell = row.insertCell();
-    durationCell.appendChild(document.createTextNode(extra[extra.length - 1].duration));
+    durationCell.appendChild(document.createTextNode(extra[extra.length - thingsAdded].duration));
 }
 
 function addExtra() {
@@ -158,6 +158,7 @@ function addExtra() {
     let intermediateStepsDivDurations = intermediateStepsDiv.getElementsByClassName('stepDuration');
 
     let events = [];
+    let thingsAdded = 0;
 
     // validate
     if (!extraNameField.checkValidity() | !extraDurationField.checkValidity()){
@@ -168,6 +169,7 @@ function addExtra() {
 
     extra.push(extraDetails);
 
+    thingsAdded += 1;
     let cumulativeDuration = 0;
     let correctedStepDuration = 0;
     for (i = 0; i < intermediateStepsDivNames.length; i++ ) {
@@ -186,11 +188,10 @@ function addExtra() {
         cumulativeDuration += Number(intermediateStepsDivDurations[i].value);
 
         extra.push({description: stepDescription, duration: correctedStepDuration});
+        thingsAdded += 1;
     }
 
-
-
-    displayExtra();
+    displayExtra(thingsAdded);
     // clear the form
     extraNameField.value='';
     extraDurationField.value='';
