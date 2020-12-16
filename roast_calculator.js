@@ -3,7 +3,11 @@ const inTimeField = document.querySelector('.inTimeField');
 const durationField = document.querySelector('.durationField');
 const extraNameField = document.querySelector('.extraNameField');
 const extraDurationField = document.querySelector('.extraDurationField');
+const extraForm = document.querySelector('.extraForm');
+
+
 const extraSubmit = document.querySelector('.extraSubmit');
+const intermediateButton = document.querySelector('.intermediateButton');
 
 extra = [];
 
@@ -106,7 +110,7 @@ function calculateTimes() {
 
     // extra times
     for (let i = 0; i < extra.length; i++){
-        description = extra[i].name + ' on time';
+        description = extra[i].description;
         eventTimes.push([description, new Date(servingTime.getTime() - (extra[i].duration * 60000))]);
     }
 
@@ -130,8 +134,8 @@ function setExtraTableHead() {
     row.appendChild(th2);
 }
 
-function displayExtra() {
-    if (extra.length === 1) {
+function displayExtra(thingsAdded) {
+    if (document.querySelector('.extraTable').rows.length === 0) {
         setExtraTableHead();
     }
     let tableDiv = document.querySelector('.extraInfo');
@@ -140,34 +144,102 @@ function displayExtra() {
     let extraTBody = extraTable.createTBody();
     let row = extraTBody.insertRow();
     let nameCell = row.insertCell();
-    nameCell.appendChild(document.createTextNode(extra[extra.length - 1].name));
+    nameCell.appendChild(document.createTextNode(extra[extra.length - thingsAdded].description));
     //nameCell.appendChild(document.createTextNode('hello'));
     let durationCell = row.insertCell();
-    durationCell.appendChild(document.createTextNode(extra[extra.length - 1].duration));
+    durationCell.appendChild(document.createTextNode(extra[extra.length - thingsAdded].duration));
 }
 
 function addExtra() {
     let extraName = extraNameField.value;
     let extraDuration = Number(extraDurationField.value);
+    let intermediateStepsDiv = document.querySelector('.intermediateSteps');
+    let intermediateStepsDivNames = intermediateStepsDiv.getElementsByClassName('stepName');
+    let intermediateStepsDivDurations = intermediateStepsDiv.getElementsByClassName('stepDuration');
+
+    let events = [];
+    let thingsAdded = 0;
 
     // validate
-    if (extraName == "") {
-        alert("Name must be filled out");
+    if (!extraNameField.checkValidity() | !extraDurationField.checkValidity()){
         return false;
     }
+    description = extraName + ' on time';
+    extraDetails = {description: description, duration: extraDuration};
 
-    if (extraDurationField.value == '' | isNaN(extraDurationField.value)) {
-        alert("Extra duration must be a number");
-        return false;
-    }
-
-    extraDetails = {name: extraName, duration: extraDuration};
     extra.push(extraDetails);
-    displayExtra();
+
+    thingsAdded += 1;
+    let cumulativeDuration = 0;
+    let correctedStepDuration = 0;
+    for (i = 0; i < intermediateStepsDivNames.length; i++ ) {
+        if(!intermediateStepsDivNames[i].checkValidity()){
+            return false;
+        }
+        if(!intermediateStepsDivDurations[i].checkValidity()){
+            return false;
+        }
+
+        stepDescription = extraName + ' ' + intermediateStepsDivNames[i].value;
+        correctedStepDuration = extraDuration - cumulativeDuration - Number(intermediateStepsDivDurations[i].value);
+
+        console.log(stepDescription);
+        console.log(cumulativeDuration);
+        cumulativeDuration += Number(intermediateStepsDivDurations[i].value);
+
+        extra.push({description: stepDescription, duration: correctedStepDuration});
+        thingsAdded += 1;
+    }
+
+    displayExtra(thingsAdded);
     // clear the form
     extraNameField.value='';
     extraDurationField.value='';
+    // delete the steps
+    extraForm.insertBefore(intermediateButton, intermediateStepsDiv);
+    while(intermediateStepsDiv.firstChild){
+        intermediateStepsDiv.removeChild(intermediateStepsDiv.lastChild);
+    }
 }
 
+function addStep(){
+    // Add two fields to the intermediate steps div
+    let stepsDiv = document.querySelector('.intermediateSteps');
+    let nChildren = stepsDiv.childElementCount;
+
+    let stepNameInput = document.createElement('input');
+    stepNameInput.type='text';
+    stepNameInput.id='stepName' + (nChildren/2);
+    stepNameInput.required='required';
+    stepNameInput.name='stepName';
+    stepNameInput.className='stepName';
+
+    let stepNameLabel = document.createElement('label');
+    stepNameLabel.for = stepNameInput.id;
+    stepNameLabel.innerHTML = 'Step description: ';
+
+    let stepDurationInput = document.createElement('input');
+    stepDurationInput.type='number';
+    stepDurationInput.id='stepDuration' + (nChildren/2);
+    stepDurationInput.required='required';
+    stepDurationInput.name='stepDuration';
+    stepDurationInput.className='stepDuration';
+
+    let stepDurationLabel = document.createElement('label');
+    stepDurationLabel.for = stepNameInput.id;
+    stepDurationLabel.innerHTML = 'Step duration: ';
+
+    stepsDiv.appendChild(stepNameLabel);
+    stepsDiv.appendChild(stepNameInput);
+    stepsDiv.appendChild(stepDurationLabel);
+    stepsDiv.appendChild(stepDurationInput);
+
+    stepsDiv.appendChild(intermediateButton);
+    stepsDiv.appendChild(document.createElement('br'));
+
+}
+
+
 extraSubmit.addEventListener('click', addExtra);
+intermediateButton.addEventListener('click', addStep);
 timesSubmit.addEventListener('click', calculateTimes);

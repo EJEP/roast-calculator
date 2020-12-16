@@ -44,6 +44,13 @@ input[type=submit] {
     border: none;
     color: #331832;
 }
+input[type=button] {
+    font-family: 'Zilla Slab', sans-serif;
+    background-color:#F0544F;
+    height: 28px;
+    border: none;
+    color: #331832;
+}
 input[type=time] {
     font-family: 'Zilla Slab', sans-serif;
     background-color:#F0FDD5;
